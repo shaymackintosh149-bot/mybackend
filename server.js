@@ -1,26 +1,31 @@
 const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
 
 const app = express();
 
-app.use(express.json());
+const server = http.createServer(app);
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  next();
+const io = new Server(server, {
+  cors: {
+    origin: "*"
+  }
 });
 
 app.get('/', (req, res) => {
-  res.send('Backend online');
+  res.send('Socket.IO backend online');
 });
 
-app.get('/api', (req, res) => {
-  res.json({
-    message: 'Hello from Render backend!'
-  });
+io.on('connection', (socket) => {
+
+  console.log('User connected');
+
+  socket.emit('message', 'Hello from Socket.IO backend!');
+
 });
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log('Server running on port ' + PORT);
+server.listen(PORT, () => {
+  console.log('Server running');
 });
