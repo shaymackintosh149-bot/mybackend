@@ -16,11 +16,22 @@ app.get('/', (req, res) => {
   res.send('Socket.IO backend online');
 });
 
+app.get('/api', (req, res) => {
+
+  res.json({
+    message: 'Hello from Render backend!'
+  });
+
+});
+
 io.on('connection', (socket) => {
 
   console.log('User connected');
 
-  socket.emit('message', 'Hello from Socket.IO backend!');
+  socket.emit(
+    'message',
+    'Hello from Socket.IO backend!'
+  );
 
 });
 
